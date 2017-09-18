@@ -15,6 +15,8 @@ type ServerMessage interface {
 	// this is called, the message type has already been read from the reader.
 	// This should return a new ServerMessage that is the appropriate type.
 	Read(*ClientConn, io.Reader) (ServerMessage, error)
+	
+	GetContent() interface{}
 }
 
 // FramebufferUpdateMessage consists of a sequence of rectangles of
@@ -36,6 +38,11 @@ func (*FramebufferUpdateMessage) Type() uint8 {
 	return 0
 }
 
+
+func (fm *FramebufferUpdateMessage) GetContent() interface{} {
+	return fm
+
+}
 func (*FramebufferUpdateMessage) Read(c *ClientConn, r io.Reader) (ServerMessage, error) {
 	// Read off the padding
 	var padding [1]byte
@@ -107,6 +114,10 @@ func (*SetColorMapEntriesMessage) Type() uint8 {
 	return 1
 }
 
+func (m *SetColorMapEntriesMessage) GetContent() interface{} {
+	return m 
+
+}
 func (*SetColorMapEntriesMessage) Read(c *ClientConn, r io.Reader) (ServerMessage, error) {
 	// Read off the padding
 	var padding [1]byte
@@ -156,6 +167,10 @@ func (*BellMessage) Type() uint8 {
 	return 2
 }
 
+func (m *BellMessage) GetContent() interface{} {
+	return m
+
+}
 func (*BellMessage) Read(*ClientConn, io.Reader) (ServerMessage, error) {
 	return new(BellMessage), nil
 }
@@ -171,6 +186,10 @@ func (*ServerCutTextMessage) Type() uint8 {
 	return 3
 }
 
+func (m *ServerCutTextMessage) GetContent() interface{} {
+	return m
+
+}
 func (*ServerCutTextMessage) Read(c *ClientConn, r io.Reader) (ServerMessage, error) {
 	// Read off the padding
 	var padding [1]byte

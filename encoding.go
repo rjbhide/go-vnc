@@ -15,6 +15,8 @@ type Encoding interface {
 	// This should return a new Encoding implementation that contains
 	// the proper data.
 	Read(*ClientConn, *Rectangle, io.Reader) (Encoding, error)
+
+	GetContent() interface{}
 }
 
 // RawEncoding is raw pixel data sent by the server.
@@ -26,6 +28,11 @@ type RawEncoding struct {
 
 func (*RawEncoding) Type() int32 {
 	return 0
+}
+
+
+func (r *RawEncoding) GetContent() interface{} {
+	return r
 }
 
 func (*RawEncoding) Read(c *ClientConn, rect *Rectangle, r io.Reader) (Encoding, error) {
